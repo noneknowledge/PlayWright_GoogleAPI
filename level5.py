@@ -1,6 +1,6 @@
 import re
 from playwright.sync_api import Playwright, sync_playwright, expect
-
+import json
 
 def run(playwright: Playwright) -> None:
     browser = playwright.chromium.launch(headless=False)
@@ -15,14 +15,19 @@ def run(playwright: Playwright) -> None:
 
     # Lấy header
     headers = page.locator("#example thead th").all_text_contents()
-    print("Headers:", headers)
+    
     pos = headers.index("Name")
-
+    lst_name = []
     # Lấy dữ liệu từng hàng
     rows = page.locator("#example tbody tr")
     for i in range(rows.count()):
         cells = rows.nth(i).locator("td").all_text_contents()
-        print(cells[pos])
+        lst_name.append(cells[pos])
+    lst_name.sort()
+    json_name = {i: lst_name[i] for i in range(len(lst_name))}
+
+    with open("data/all_names.json", "w", encoding="utf-8") as f:
+        json.dump(json_name, f, ensure_ascii=False, indent=4)
 
     # ---------------------
     context.close()

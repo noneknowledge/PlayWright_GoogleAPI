@@ -2,6 +2,6 @@
 
 credentials.json
 
-.helper/
+.helper/__pycache__/
 
 .env
