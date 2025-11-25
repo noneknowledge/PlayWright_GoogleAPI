@@ -9,9 +9,15 @@ config = dotenv_values(".env")
 def getEmailContent() -> json:
     with open("data/basic.json", "r", encoding="utf-8") as f:
         data = json.load(f)
+    
+    with open("data/history.json", "r", encoding="utf-8") as f:
+        history = json.load(f)
+
     content = {'Name':data['Name']['0'],
                'Email':data['Email']['0'],
-               'Subject':data['Content']['0']
+               'Subject':data['Content']['0'],
+                'preContent':history['preContent'],
+                'Requirement':history['requirements_prev']
                }
    
     return content
@@ -31,8 +37,8 @@ async def sendEmail(page: Page, content:json):
 
 
     await body.fill(f"Dear {content['Name']}, \n \n \
-    [Content from Level 2 D2 previous version]\
-                    \
+[Content from Level 2 D2 previous version: {content['preContent']}]\
+\n [Requirements from Level 2 D7 previous version: {content['Requirement']}]                    \
                     ")
     await to.fill(f"{content['Email']}")
     await subject.fill(content['Subject'])

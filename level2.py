@@ -19,7 +19,17 @@ async def getPreviusContent(page:Page):
     timeStamp = await page.locator(".docs-blameview-timestamp").nth(0).text_content()
     content =  popUp.split('"')
     print("Done")
-    return content[1], content[3], timeStamp
+
+    keyWord = ['delete', 'xóa']
+    preContent = content[1]
+    for x in keyWord:
+        print(f"Key word {x} so với {content[0]}")
+        if x.upper() in content[0].upper():
+            print("Thay đổi preconte")
+            preContent = content[3]
+
+
+    return preContent, content[3], timeStamp
 
 async def cell_Content(page:Page,cell:str = None ):
 
@@ -57,16 +67,11 @@ async def run(playwright:Playwright,user_dir: str) -> None:
     
     preContent, newContent, timeStamp = await cell_Content(page,"D2")
     
-    print("Before: ", preContent)
-    print("After: " ,newContent)
-    print("TimeStamp: " ,timeStamp)
-    print("JSon: ", {preContent, timeStamp})
 
     requirements_prev, new_req, requirements_timestamp_prev = await cell_Content(page,"D7")
 
-    print("Before Req: ",  requirements_prev)
-    print("After Rq: " ,new_req)
-    print("TimeStamp Req: " ,requirements_timestamp_prev)
+    print("Previus requirement: ", requirements_prev)
+    print("New requirement: " ,new_req)
 
 
     test =  {'preContent': preContent, 'timeStamp': timeStamp, 'requirements_prev':requirements_prev, 'requirements_timestamp_prev':requirements_timestamp_prev}
