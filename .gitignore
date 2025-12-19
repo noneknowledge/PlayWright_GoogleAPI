@@ -2,6 +2,10 @@
 
 credentials.json
 
+oauthClientID.json
+
+token.json
+
 .helper/__pycache__/
 
 .env
